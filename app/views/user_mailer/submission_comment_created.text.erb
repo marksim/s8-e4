@@ -1,0 +1,15 @@
+Please do not reply to this email. Instead reply from:
+
+<%= course_assignment_submission_url(@submission.assignment.course, @submission.assignment, @submission, :only_path => false) %>
+
+-----
+
+Comment from <%= @comment.user.name %>
+-----
+
+<%= escape_and_sanitize @comment.comment_text %>
+
+-----
+Please do not reply to this email. Instead reply from:
+
+<%= course_assignment_submission_url(@submission.assignment.course, @submission.assignment, @submission, :only_path => false) %>

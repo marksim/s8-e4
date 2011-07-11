@@ -1,0 +1,81 @@
+- title @assignment.name
+
+- content_for :header_bottom do
+  :javascript
+    $(function(){
+      $('#edit_notes').click(function(){
+        $('#note_content').trigger("edit");
+      });
+
+      $('#note_content').click(function(e){
+        if (e.target.tagName != "A") {
+          $('#note_content').trigger("edit");
+        }
+      });
+
+      var editPath = '#{assignment_path(@assignment)}/notes';
+
+      var placeholder = "Click to edit this page. It's like a wiki page that is" +
+      " shared with all students in the course.";
+
+      $('#note_content').editable(editPath, {
+        type:        'textarea',
+        height:      '200px',
+        width:       '98%',
+        indicator:   'Saving ...',
+        cancel:      'Cancel',
+        submit:      'Save',
+        loadurl:     '#{assignment_path(@assignment)}.text',
+        tooltip:     "Click 'Edit' to make changes",
+        event:       'edit',
+        onblur:      'ignore',
+        placeholder: placeholder,
+        clicktoedit: false
+      });
+
+      SidebarMenu.register('sidebar');
+
+      $('tr.submission').click(function(e){
+        window.location = $(e.currentTarget).attr('data-url');
+      });
+    });
+
+- content_for :breadcrumbs do
+  = render :partial => "courses/breadcrumbs"
+  %span.separator &rarr;
+  = render :partial => "breadcrumbs"
+  %span.separator &rarr;
+  %span#current_section
+
+- content_for :bucket do
+  #description.bucket
+    = md(@assignment.description)
+
+  #submissions.bucket
+    %table.submissions
+      %tr
+        %th Student
+        %th Status
+      - @submissions.each do |status, submissions|
+        - submissions.each do |submission|
+          %tr.submission{:class => (current_user == submission.user ? 'current' : nil),
+              :"data-url" => submission_path(submission) }
+            %td.student
+              = user_icon(submission.user, 32)
+              = submission.user.name
+            %td.status
+              .box{:style => "background-color: ##{submission_status_hex_color(status)}"}
+              = submission_status_name(status)
+
+  #notes.bucket
+    .controls
+      %input.clean-gray.small#edit_notes{:type => "button", :value => "Edit"}
+    #note_content= md(@assignment.notes)
+
+  #activity.bucket
+    - @activities.each do |activity|
+      = render :partial => "courses/activity",
+              :locals => {:activity => activity}
+    = will_paginate @activities, :params => {:anchor => "activity"}
+
+= render :partial => "layout"

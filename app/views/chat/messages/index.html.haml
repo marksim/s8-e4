@@ -1,0 +1,29 @@
+- title params[:channel]
+
+- content_for :header_bottom do
+  = javascript_include_tag 'uw.logs'
+  :javascript
+    $(function() {
+      UW.Logs.init({
+        lastMessageRecordedAt: '#{@messages.last.try(:recorded_at)}',
+        lastMessageId:          #{@messages.last.try(:id) || -1},
+        url:                   '#{chat_messages_path}',
+        channel:               '#{params[:channel]}',
+        topic:                 '#{params[:topic]}'
+      });
+    });
+
+%h1= "IRC Log " + (@topic.present? ? "(#{@topic.name})" : "")
+
+%p
+  - if @more_messages
+    = link_to "Load all messages", chat_messages_path(:channel => params[:channel], :full_log => true, :topic => params[:topic])
+    \|
+
+  = link_to "Discussions", chat_discussions_path(params[:channel])
+
+%table.messages
+  - @messages.each do |message|
+    = render :partial => "display", :locals => {:message => message}
+
+#bottom

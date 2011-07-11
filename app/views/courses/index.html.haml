@@ -1,0 +1,18 @@
+%h1 Courses
+
+#courses
+  - if @courses.any?
+    .label Active
+  - @courses.each do |course|
+    = render :partial => "course", :locals => { :course => course }
+  
+  - if @instructed.any?
+    .label Teaching    
+  - @instructed.each do |course|
+    = render :partial => "course", :locals => { :course => course }
+    
+  - if @mentored.any?
+    .label Mentoring    
+  - @mentored.each do |course|
+    = render :partial => "course", :locals => { :course => course }
+  

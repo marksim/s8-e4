@@ -1,0 +1,39 @@
+.alumni_header
+  Our alumni have all successfully completed the Mendicant University core skills course, an intense three week session that covers a number of important topics that any practicing Ruby developer should be familiar with. The students on this list have all shown they can ship clean code under tight deadlines while maintaining a balance between learning new things and getting things done. These are the folks to watch if you want to know who's up and coming in the Ruby world.
+
+#alumni_links_container
+  %ul#alumni_links
+    - @terms_by_year.each_pair do |year, terms|
+      %li.term_year{:class => ("selected" if params[:year].to_i == year && !defined?(@term))}
+        = link_to year, alumni_path(year)
+    %li.last{:class => ("selected" if params[:year].blank? && !action_name[/recent/])}
+      = link_to "All".html_safe, "/alumni"
+    %li.last{:class => ("selected" if action_name[/recent/])}
+      = link_to "Recent", "/alumni/recent"
+
+#alumni
+  - @alumni.each do |alumnus|
+    .alumnus
+      .name
+        = alumnus_name(alumnus)
+
+        .badge
+          %img{:src => alumnus_image(alumnus)}
+
+      .information
+        .month
+          = Date::MONTHNAMES[alumnus.alumni_month]
+          = alumnus.alumni_year
+        .social
+          - if show_github?(alumnus)
+            %a{:href => "http://github.com/#{alumnus.github_account_name}",
+              :title => alumnus.github_account_name}
+              %img{:src => "/images/icons/social/github.png"}
+          - else
+            %img{:src => "/images/icons/social/github_disabled.png"}
+          - if show_twitter?(alumnus)
+            %a{:href => "http://twitter.com/#{alumnus.twitter_account_name}",
+              :title => alumnus.twitter_account_name}
+              %img{:src => "/images/icons/social/twitter.png"}
+          - else
+            %img{:src => "/images/icons/social/twitter_disabled.png"}

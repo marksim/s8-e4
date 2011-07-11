@@ -1,0 +1,7 @@
+%h1.form-header Edit Assignment
+
+= form_for @assignment, :html => {:class => "bp"},
+  :url => admin_course_assignment_path(@course, @assignment) do |f|
+  = render :partial => "form", :locals => {:f => f}
+
+#submit_bar_padding

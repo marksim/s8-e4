@@ -1,0 +1,5 @@
+%h1
+  = link_to "#{@course.name}:", edit_admin_course_path(@course)
+  Assignments
+  
+= render :partial => "assignments"

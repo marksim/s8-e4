@@ -1,0 +1,27 @@
+%p
+  = f.label :name
+  = f.text_field :name
+
+%p
+  = f.label :short_description
+  = f.text_field :short_description
+
+%p
+  = f.label :sort_order
+  = f.text_field :sort_order
+
+%hr
+
+%h3 Assignment Description
+
+= f.text_area :description, :'data-preview' => true
+
+%hr
+
+- unless @assignment.new_record?
+  = render :partial => "submissions", :locals => {:f => f}
+
+
+#submit_bar
+  = f.submit @assignment.new_record? ? 'Create' : 'Save'
+  = link_to 'Cancel', admin_course_assignments_path(@course), :class => "cancel"

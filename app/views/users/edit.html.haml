@@ -1,0 +1,90 @@
+- content_for :header_bottom do
+  %script{ :src => "http://maps.google.com/maps/api/js?sensor=false" }
+  = javascript_include_tag 'jquery.ui.addresspicker'
+  :javascript
+    $(function () {
+      var picker = $("#user_location").addresspicker({
+          elements: {
+            map: "#map",
+            lat: "#user_latitude",
+            lng: "#user_longitude"
+          }
+        }),
+        marker = picker.addresspicker("marker");
+
+      marker.setVisible(true);
+      picker.addresspicker("updatePosition");
+    });
+
+- title 'Edit Personal Information'
+
+%h1.form-header Edit Personal Information
+
+= form_for @user, :html => {:class => 'bp', :id => 'user_edit'} do |form|
+  = error_messages_for(@user)
+  %p
+    = form.label :email
+    = form.text_field :email
+
+  %p
+    = form.label :real_name
+    = form.text_field :real_name
+
+  %p
+    = form.label :nickname
+    = form.text_field :nickname
+
+  %p
+    = form.label :github_account_name, "Github"
+    = form.text_field :github_account_name
+
+  %p
+    = form.label :twitter_account_name, "Twitter"
+    = form.text_field :twitter_account_name
+    
+  %p
+    = form.label :project_url
+    = form.text_field :project_url
+  
+  %p
+    = form.label :time_zone
+    = form.time_zone_select :time_zone, ActiveSupport::TimeZone.all.sort,
+                            :include_blank => true, :default => ""
+
+  %p
+    = form.label :location, 'Address / Location'
+    = form.text_field :location
+    = form.hidden_field :latitude
+    = form.hidden_field :longitude
+
+  %p
+    = render :partial => "irc_channels", :locals => {:form => form}
+  
+  - if @user.alumnus?
+    
+    %hr
+
+    %h2 Alumni Preferences
+    
+    = form.fields_for :alumni_preferences do |p|
+      
+      %p
+        = p.label :show_on_public_site, "Visible to public"
+        = p.check_box :show_on_public_site
+        
+      %p
+        = p.label :show_twitter
+        = p.check_box :show_twitter
+      
+      %p
+        = p.label :show_github
+        = p.check_box :show_github
+        
+      %p
+        = p.label :show_real_name
+        = p.check_box :show_real_name
+  
+  %p
+    = form.submit 'Update'
+
+%div#map

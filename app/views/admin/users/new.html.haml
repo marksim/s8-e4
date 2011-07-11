@@ -1,0 +1,8 @@
+- title 'New User'
+
+%h1.form-header New User
+
+- nested_form_for @user, :url => admin_users_path, :html => {:class => 'bp'} do |f|
+  = render :partial => "form", :object => f
+
+#submit_bar_padding

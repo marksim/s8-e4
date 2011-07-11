@@ -1,0 +1,107 @@
+- title @course.name
+      
+- content_for :header_bottom do
+  :javascript
+    $(function(){
+      $('#edit_notes').click(function(){
+        $('#note_content').trigger("edit");
+      });
+
+      $('#note_content').click(function(e){
+        if (e.target.tagName != "A") {
+          $('#note_content').trigger("edit");
+        }
+      });
+      
+      var editPath = '#{course_path(@course)}/notes';
+
+      var placeholder = "Click to edit this page. It's like a wiki page that is" +
+      " shared with all students in the course.";
+
+      $('#note_content').editable(editPath, {
+        type:        'textarea',
+        height:      '200px',
+        width:       '98%',
+        indicator:   'Saving ...',
+        cancel:      'Cancel',
+        submit:      'Save',
+        loadurl:     '#{course_path(@course)}.text',
+        tooltip:     "Click 'Edit' to make changes",
+        event:       'edit',
+        onblur:      'ignore',
+        placeholder: placeholder,
+        clicktoedit: false
+      });
+      
+      SidebarMenu.register('sidebar');
+      
+      jQuery("label.infield").inFieldLabels();
+      
+      UW.Timezones.init();
+    });
+
+- content_for :breadcrumbs do
+  = render :partial => "breadcrumbs"
+  %span.separator &rarr;
+  %span#current_section
+  
+- content_for :bucket do
+  #description.bucket
+    = md(@course.description)
+  
+  #assignments.bucket
+    - @course.assignments.each do |assignment|
+      = link_to course_assignment_path(@course, assignment) do
+        .assignment
+          %span.name= assignment.name
+          %span.description= assignment.short_description
+  
+  #progress.bucket
+    = render :partial => "dashboard/assignments", 
+      :locals => {:course => @course, :expanded => true}
+  
+  #notes.bucket
+    .controls
+      %input.clean-gray.small#edit_notes{:type => "button", :value => "Edit"}
+    #note_content= md(@course.notes)
+      
+  #documents.bucket
+    - @course.documents.each do |document|
+      .document
+        = link_to course_document_path(@course, document) do
+          %span.name= document.title
+          %span.description= document.description
+
+  #activity.bucket
+    - @activities.each do |activity|
+      = render :partial => "activity", 
+              :locals => {:activity => activity}
+    = will_paginate @activities, :params => {:anchor => "activity"},
+      :param_name => "activity_page"
+      
+  - if @course.channel
+    #irc_log.bucket
+      = render :partial => "/chat/recent", 
+        :locals => { :channel            => @course.channel, 
+                     :full_body          => true,
+                     :number_of_messages => 20 }
+      = link_to "View full logs", 
+        chat_messages_path(:channel => @course.channel.name)
+    
+  #participants.bucket
+    #directory
+      = form_tag course_path(@course, :anchor => "participants"), :method => :get, 
+        :id => "directory_search" do
+        = label_tag :search, "Name or Email", 
+          :class => "infield"
+        = text_field_tag :search, params[:search]
+        = submit_tag "Search"
+  
+      - @users.each do |user|
+        = render :partial => '/users/user', :locals => { :user => user, 
+          :roles => user.course_memberships.where(:course_id => @course.id)}
+
+      = will_paginate @users, :params => {:anchor => "participants"}, 
+        :param_name => "user_page"
+    
+= render :partial => "layout"

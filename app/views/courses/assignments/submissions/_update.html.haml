@@ -1,0 +1,13 @@
+.activity
+  .header
+    = user_icon(activity.user)
+    = activity.user.name
+    .details
+      - if activity.context.blank?
+        = activity.description
+      - else
+        = md(activity.context.downcase, :no_p => true)
+    .on
+      = time_ago_in_words activity.created_at
+      ago
+.content{:style => "display:none;"}= md(activity.context)

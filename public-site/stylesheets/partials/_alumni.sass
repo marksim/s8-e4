@@ -1,0 +1,93 @@
+.alumni_header
+  font-style: italic
+  line-height: 1.5em
+  margin: 0 1em 1em
+  padding: 1.5em
+
+#alumni
+  .alumnus
+    width: 283px
+    margin: 10px
+    background: #f1f1f1
+    display: inline-block
+
+    +border_radius_top(5px)
+
+    .name
+      +border_radius_top(5px)
+      font-size: 1.1em
+      padding: 7px
+      text-align: center
+      color: #ccc
+      text-shadow: 0 1px 0 #000
+      background: #333
+      background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #555), color-stop(100%, #333))
+      background-image: -moz-linear-gradient(top, #555 0%, #333 100%)
+      background-image: linear-gradient(top, #555 0%, #333 100%)
+
+    .information
+      padding: 10px 5px
+
+      .month
+        margin-top: 5px
+        display: inline-block
+        color: #555
+
+      .social
+        float: right
+        text-align: right
+        padding-bottom: 5px
+        a
+          img
+            border: none
+
+    .badge
+      padding: 5px
+      float: left
+      margin-right: 10px
+      color: #bbb
+      text-align: right
+      text-shadow: none
+      color: #333
+
+      img
+        display: block
+        -moz-box-shadow: black 0px 0px 5px 0
+        -webkit-box-shadow: black 0px 0px 5px 0
+        -o-box-shadow: black 0px 0px 5px 0
+        box-shadow: black 0px 0px 5px 0
+
+#alumni_links_container
+  background-color: #cccccc
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #f0f0f0), color-stop(100%, #cccccc))
+  background-image: -moz-linear-gradient(top, #f0f0f0 0%, #cccccc 100%)
+  background-image: linear-gradient(top, #f0f0f0 0%, #cccccc 100%)
+  text-shadow: 0 1px 0 white
+  font-size: 15px
+  letter-spacing: 1px
+  margin: 2px 22px 20px 10px
+  padding: 4px
+  -moz-border-radius: 5px
+  -webkit-border: 5px
+  border-radius: 5px
+  border: 1px solid #999999
+
+#alumni_links
+  list-style: none
+  margin: 0
+  padding: 0
+  display: inline
+  ul
+    display: inline
+  li
+    display: inline
+    a
+      padding: 4px
+      margin-right: 4px
+      color: #666
+    &.selected
+      a
+        color: #000
+  .last
+    float: right
+    margin-right: 0

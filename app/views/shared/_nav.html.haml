@@ -1,0 +1,51 @@
+#nav
+  .centered
+    %ul
+      - if current_user
+        %li
+          = link_to "Dashboard", dashboard_path, :class => "first"
+          = selected_arrow(:dashboard)
+        - if current_access_level.allows? :view_courses
+          %li#courses
+            = link_to "Courses".html_safe + image_tag("down_arrow.png", :class => "drop"), '#'
+            = selected_arrow(:courses)
+            #courses_dropdown
+              %ul
+                - current_user.courses.active.group_by(&:term).each do |term, courses|
+                  - if term
+                    %li.term= term.name
+                  - courses.each do |course|
+                    %li= link_to course.name, course_path(course)
+                - if current_user.courses.archived.any?  
+                  %li.small= link_to "Archived Courses", courses_path
+        - if current_access_level.allows? :view_directory
+          %li
+            = link_to "Directory", users_path
+            = selected_arrow(:directory)
+        - if current_access_level.allows? :discuss_admissions
+          %li
+            = link_to "Admissions", admissions_submissions_path
+        - if current_access_level.allows? :manage_users
+          %li#administration
+            = link_to "Administration".html_safe + image_tag("down_arrow.png", :class => "drop"), '#'
+            = selected_arrow(:administration)
+            #administration_dropdown
+              %ul
+                %li= link_to "Users", admin_users_path
+                %li= link_to "Courses", admin_courses_path
+                %li= link_to "Terms", admin_terms_path
+                %li= link_to "Documents", admin_documents_path
+                %li= link_to "Announcements", admin_announcements_path
+                %li= link_to "Admissions", admissions_submissions_path
+                %li= link_to "Chat Channels", admin_chat_channels_path
+                %li= link_to "Submission Statuses", admin_submission_statuses_path
+                %li= link_to "Broadcast Emails", new_admin_group_mail_path
+      - else
+        %li
+          = link_to "Sign in", new_user_session_path, :class => "first"
+    :javascript
+      DropdownMenu.register('courses');
+      DropdownMenu.register('administration');
+      
+    = link_to "Public site", "/", :id => "public_link"
+    .clear

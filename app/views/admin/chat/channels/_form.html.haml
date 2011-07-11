@@ -1,0 +1,12 @@
+= error_messages_for(@channel)
+
+%p
+  = f.label :name
+  = f.text_field :name
+  
+%p
+  = f.label :public
+  = f.check_box :public
+    
+%p.submit
+  = f.submit

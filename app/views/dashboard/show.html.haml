@@ -1,0 +1,48 @@
+.two-col
+  .announcements
+    - if current_user.location.nil?
+      .announcement
+        University Web now allows users to enter their location so we can map
+        our students. Please update your 
+        = link_to "profile", edit_user_path(current_user)
+        to be included.
+
+  .main
+    - if current_user.student_courses.active.current.any?
+      %h3 Current Progress
+  
+    - current_user.student_courses.active.current.each do |course|
+      = render :partial => "assignments", :locals => {:course => course}
+          
+    - current_user.mentor_courses.active.current.each do |course|
+      = render :partial => "assignments", :locals => {:course => course}
+      
+    - current_user.instructor_courses.current.active.each do |course|
+      = render :partial => "assignments", :locals => {:course => course}
+  
+  - content_for :header_bottom do
+    = javascript_include_tag "jquery.jgfeed-min", "blog_feed"
+
+  .left
+    %h3
+      IRC Channels
+      %span.right= link_to "Show/Hide Channels", edit_user_path(current_user)
+
+    - current_user.chat_channels.visible_on_dashboard.each do |channel|
+      = render :partial => "/chat/recent", :locals => {:channel => channel}
+
+  #majestic_blog.right.blog.last
+    %h4= link_to "RMU Blog",
+          "http://blog.majesticseacreature.com/tag/rubymendicant",
+          :target => "_blank"
+
+    %ul
+      %li Loading...
+
+  #learning_blog.right.blog.last
+    %h4= link_to "Education Reimagined Blog",
+          "http://educationreimagined.com/",
+          :target => "_blank"
+
+    %ul
+      %li Loading...

@@ -1,0 +1,24 @@
+= link_to activity_path(activity) do
+  .activity
+    = image_tag activity.user.gravatar_url(24), :alt => ""
+    - #= user_icon(activity.user)
+    - # Removed due to illegal nested links: https://www.pivotaltracker.com/story/show/14551241
+    %span.name= activity.user.name
+    = activity.description.downcase
+    -  if activity.submission
+      on
+      = "#{activity.submission.user.name}'s"
+      submission
+
+    - if @assignment.nil?
+      for
+      %span.assignment= activity.assignment.name
+
+    .context
+      .time
+        = time_ago_in_words(activity.created_at)
+        ago
+      - if Assignment::Submission === activity.actionable
+        = md(activity.context)
+      - else
+        = activity.context
