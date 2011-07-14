@@ -3,7 +3,11 @@ class Admin::CoursesController < Admin::Base
   before_filter :find_submission_statuses, :only => [:edit, :update]
 
   def index
-    @courses = Course.order('start_date')
+    if params[:search]
+      @courses = Course.full_text_search(params[:search]).order('start_date')
+    else
+      @courses = Course.order('start_date')
+    end
   end
 
   def new

@@ -1,7 +1,16 @@
 %h1.form-header Courses
 
+.search
+  = form_tag admin_courses_path, :method => :get do
+    = label_tag :search
+    = text_field_tag :search, ''
+
 %p.prompt
   = link_to "Create New Course", new_admin_course_path
+
+
+  
+.clear
 
 %table.admin
   %thead

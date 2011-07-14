@@ -1,4 +1,6 @@
 class Course < ActiveRecord::Base
+  include PgSearch
+
   has_many :course_memberships, :dependent  => :destroy
   has_many :users,              :through    => :course_memberships
 
@@ -28,6 +30,13 @@ class Course < ActiveRecord::Base
   scope :active,   where(:archived => false).order('start_date')
   scope :archived, where(:archived => true ).order('start_date')
   scope :current,  where(["start_date < ?", Date.today + 15.days])
+
+  pg_search_scope :full_text_search, 
+    :against => [:name, :description, :notes, :cc_comments], 
+    :associated_against => {
+      :assignments => [:name, :description, :notes]
+    },
+    :using => [:tsearch]
 
   def students
     course_member_by_type('student')
