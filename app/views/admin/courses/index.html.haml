@@ -2,8 +2,8 @@
 
 .search
   = form_tag admin_courses_path, :method => :get do
-    = label_tag :search
     = text_field_tag :search, ''
+    = submit_tag 'Search'
 
 %p.prompt
   = link_to "Create New Course", new_admin_course_path
